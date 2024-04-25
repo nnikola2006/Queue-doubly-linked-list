@@ -17,6 +17,7 @@ public:
     Queue(){
         front = nullptr;
         rear = nullptr;
+        count = 0;
     }
     ~Queue(){
         while(front != nullptr){
@@ -25,7 +26,7 @@ public:
             delete temp;
         }
     }
-    void enqueue(int data){
+    void enqueue(const int data){
         // Creates a newNodeorary new node
         Node* newNode = nullptr;
         try{
@@ -66,21 +67,74 @@ public:
             front = front->next;
             front->prev = nullptr;
         }
-        // Delete the allocated memory using the temp Node
+        // Deletes the memory allocated in the temp Node
+        count--;
         delete temp;
         return data;
     }
-    int size(){
-        return count;
+    void print(){
+        if(isEmpty()){
+            cout << "The queue is empty!" << endl;
+            return;
+        }
+
+        // Prints all the elements of the queue
+        cout << "Queue: ";
+        Node* temp = rear;
+        while(temp != front){
+            cout << temp->data << "->";
+            temp = temp->prev;
+        }
+        cout << temp->data << endl;
     }
-    bool isEmpty(){
+    void full_print(){
+        // Prints everything about the queue
+        cout << "All values for a queue:" << endl;
+        cout << "Size: " << size() << endl;
+        cout << std::boolalpha << "Empty: " << isEmpty() << std::noboolalpha << endl;
+        print();
+    }
+    int peek_front() const{
+        return front->data;
+    }
+    int peek_back() const{
+        return rear->data;
+    }
+    bool isEmpty() const{
         return front == nullptr;
     }
-
+    int size() const{
+        return count;
+    }
+    void fill(const int data, const int len){
+        for(int i = 0; i < len; i++){
+            enqueue(data);
+        }
+    }
+    void clear(){
+        if(isEmpty()){
+            return;
+        }
+        while(count != 0){
+            dequeue();
+        }
+    }
 };
 
 int main(){
+    Queue queue;
 
+    // Tests
+    queue.fill(10, 4);
+    queue.dequeue();
+    queue.enqueue(51);
+    queue.full_print();
+    queue.clear();
+    
+    for(int i = 0; i < 7; i++){
+        queue.enqueue(i*i);
+    }
+    queue.full_print();
 
     return 0;
 }
